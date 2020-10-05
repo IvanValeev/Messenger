@@ -3,6 +3,7 @@ from app.models import User, Session
 import uuid
 from flask import request, make_response, jsonify, session, flash
 
+
 def make_registration(login, pswd):
     user = User(username=login)
     user.set_password(pswd)
