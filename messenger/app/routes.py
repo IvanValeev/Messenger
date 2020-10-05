@@ -10,8 +10,7 @@ import uuid
 from functools import wraps
 from app.forms import LoginForm, RegistrationForm
 import time
-
-    
+  
 
 def login_required(f):
     @wraps(f)
