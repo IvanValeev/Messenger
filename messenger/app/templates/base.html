@@ -1,0 +1,27 @@
+<html>
+    <head>
+      {% if title %}
+      <title>{{ title }} - Messenger</title>
+      {% else %}
+      <title>Welcome to Messenger</title>
+      {% endif %}
+    </head>
+    <body>
+        <div>
+            Messenger: 
+            <a href="/index">Home</a>
+            <a href="/login">Login</a>
+            <a href="/logout">Logout</a>
+            <a href="/register">Registration</a>
+            <a href="/deactivate">Delete registration</a>
+        </div>
+        <hr>
+        <table width="100%" height="100%">
+            <tr>
+                <td></td>
+                <td><center>{% block content %}{% endblock %}</center></td>
+                <td></td>
+            </tr>
+        </table>
+    </body>
+</html>
