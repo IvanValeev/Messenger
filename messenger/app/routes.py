@@ -2,7 +2,7 @@
 from flask import render_template, flash, redirect, url_for, session
 from app import app
 from flask import request, make_response, jsonify
-from api_actions import make_registration, delete_registration, check_registration, logging_in, logout
+from app.api import make_registration, delete_registration, check_registration, logging_in, logout
 from app.models import User, Session
 from flask_login import current_user, login_user
 import json
@@ -10,7 +10,7 @@ import uuid
 from functools import wraps
 from app.forms import LoginForm, RegistrationForm
 import time
-  
+    
 
 def login_required(f):
     @wraps(f)
@@ -23,6 +23,7 @@ def login_required(f):
     return wrapper
 
 @app.route('/index')
+@app.route('/')
 def index():
     return render_template('index.html')
 
