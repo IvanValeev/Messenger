@@ -26,8 +26,12 @@ class TestCase(unittest.TestCase):
         db.drop_all()
 
     
-    def test_main_page(self):
+    def test_show_main_page(self):
         response = self.app.get('/', follow_redirects=True)
+        self.assertEqual(response.status_code, 200)
+
+    def test_show_login_page(self):
+        response = self.app.get('/login', follow_redirects=True)
         self.assertEqual(response.status_code, 200)
 
 
@@ -35,13 +39,41 @@ class TestCase(unittest.TestCase):
         excepted = True
         self.assertEqual(check_registration('test'), excepted)
 
-    def test_loggining_in(self):
-        response = self.app.post('/login', data=dict(username='Ivan', password='Valeev'), follow_redirects=True)
-        self.assertEqual(response.status_code, 200)
+    def test_success_loggining_in(self):
+        response = self.app.post('/login', data=dict(username='test', password='test'), follow_redirects=True)
+        print(response.data)
+        self.assertTrue(response.data != 'Wrong login or password!')
 
+    def test_false_loggining_in(self):
+        response = self.app.post('/login', data=dict(username='1', password='2'), follow_redirects=True)
+        self.assertEqual(response.data , b'Wrong login or password!')
 
-   
+    def test_false_loggining_in_wrong_login(self):
+        response = self.app.post('/login', data=dict(username='1', password='test'), follow_redirects=True)
+        self.assertEqual(response.data , b'Wrong login or password!')
+
+    def test_false_loggining_in_wrong_password(self):
+        response = self.app.post('/login', data=dict(username='test', password='2'), follow_redirects=True)
+        self.assertEqual(response.data , b'Wrong login or password!')
+
+    def test_login_require_logout(self):
+        response = self.app.get('/logout')
+        self.assertEqual(response.data , b'First you need to login!')
+
+    def test_logout(self):
+        resp = self.app.post('/login', data=dict(username='test', password='test'), follow_redirects=True)
+        response = self.app.get('/logout')
+        self.assertEqual(response.data , b'Exit was success!')
+
+    def test_login_require_deactivate_registration(self):
+        response = self.app.get('/deactivate')
+        self.assertEqual(response.data , b'First you need to login!')
+
+    def test_deactivate_registration(self):
+        resp = self.app.post('/login', data=dict(username='test', password='test'), follow_redirects=True)
+        response = self.app.get('/deactivate')
+        self.assertEqual(response.data , b'Registration successful delete!')
+
     
-
 if __name__ == '__main__':
     unittest.main(verbosity=2)
