@@ -73,7 +73,6 @@ class TestCase(unittest.TestCase):
         resp = self.app.post('/login', data=dict(username='test', password='test'), follow_redirects=True)
         response = self.app.get('/deactivate')
         self.assertEqual(response.data , b'Registration successful delete!')
-
-    
+   
 if __name__ == '__main__':
     unittest.main(verbosity=2)
