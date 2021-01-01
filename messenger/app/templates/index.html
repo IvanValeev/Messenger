@@ -2,6 +2,13 @@
 
 {% block content %}
 
-<h2>Site will be cool!</h2>
+<font color="orange"><h2>Site will be cool!</h2></font>
+
+<style>
+    .colortext {
+    color: #930; /* Цвет текста */
+   }
+    body{background-image:url("{{ url_for('static', filename='images/wah.jpg') }}")}
+</style>
 
 {% endblock %}

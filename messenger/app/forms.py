@@ -1,6 +1,6 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, PasswordField, BooleanField, SubmitField
-from wtforms.validators import DataRequired, EqualTo, ValidationError
+from wtforms import StringField, PasswordField, BooleanField, SubmitField, TextAreaField
+from wtforms.validators import DataRequired, EqualTo, ValidationError, Length
 from app.models import User
 
 class LoginForm(FlaskForm):
@@ -21,3 +21,12 @@ class RegistrationForm(FlaskForm):
         user = User.query.filter_by(username=username.data).first()
         if user is not None:
             raise ValidationError('Please use a different username.')
+
+class SendMessageForm(FlaskForm):
+    receiver = StringField('Receiver', validators=[DataRequired()])
+    msg = TextAreaField('Message', validators=[Length(min=0, max=200)])
+    submit  = SubmitField('Send')
+
+class AddFriendsForm(FlaskForm):
+    friend = StringField('Friend', validators=[DataRequired()])
+    submit  = SubmitField('Add')

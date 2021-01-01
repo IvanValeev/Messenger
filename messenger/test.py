@@ -3,9 +3,9 @@ import unittest
 
 from config import basedir
 from app import app, db
-from app.models import User, Session, Friends
+from app.models import User, Session, Friends, Messages
 from app.api import make_registration, delete_registration, check_registration, logging_in, logout, add_to_friend_list, kick_from_friends, kick_all_friends, find_friend_of_user
-from app.api import find_all_friends_of_user
+from app.api import find_all_friends_of_user, send_msg, receive_msg, get_all_incoming_msg
 from flask import current_app, make_response, session
 
 class TestCase(unittest.TestCase):
@@ -23,6 +23,8 @@ class TestCase(unittest.TestCase):
         make_registration('test2', 'test')
         add_to_friend_list('test', 'test1')
         add_to_friend_list('test', 'test2')
+        send_msg('test', 'test1', 'test_message')
+        send_msg('test', 'test1', 'test_message1')
 
 
     def tearDown(self):
@@ -156,7 +158,29 @@ class TestCase(unittest.TestCase):
         for friend in list_of_friends:
             result.append(friend.friend)
         self.assertEqual(expected , result)
-    
+
+    #send_msg, receive_msg, get_all_incoming_msg
+    def test_send_msg(self):
+        send_msg('test', 'test1', 'test_message2')
+        expected = 'test_message2'
+        result = Messages.query.filter_by(sender='test', receiver='test1', msg_text='test_message2' ).first()
+        self.assertEqual(expected , result.msg_text)
+
+
+    def test_receive_msg(self):
+        expected = 'test_message1'
+        result = receive_msg('test', 'test1', 'test_message1')
+        self.assertEqual(expected , result.msg_text)
+
+
+    def test_get_all_incoming_msg(self):
+        result = []
+        expected = ['test_message', 'test_message1' ]
+        res = get_all_incoming_msg('test1')
+        for msg in res:
+            result.append(msg.msg_text)
+        self.assertEqual(expected , result)
+
 
 if __name__ == '__main__':
     unittest.main(verbosity=2)

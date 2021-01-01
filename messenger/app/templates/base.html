@@ -5,23 +5,36 @@
       {% else %}
       <title>Welcome to Messenger</title>
       {% endif %}
+      <link rel="stylesheet" media="screen" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css">
+     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     </head>
     <body>
         <div>
             Messenger: 
             <a href="/index">Home</a>
-            <a href="/login">Login</a>
+            {% if session.get('session_id', None) != None %}
+            <a href="{{ url_for('user', username=session['username']) }}">Profile</a>
             <a href="/logout">Logout</a>
-            <a href="/register">Registration</a>
             <a href="/deactivate">Delete registration</a>
+            {% else %}
+            <a href="/login">Login</a>
+            <a href="/register">Registration</a>
+            {% endif %}
         </div>
         <hr>
         <table width="100%" height="100%">
+            <tr>
+                <td><center>{% block first %}{% endblock %}</td>
+                <td></td>
+                <td></td>
+            </tr>
             <tr>
                 <td></td>
                 <td><center>{% block content %}{% endblock %}</center></td>
                 <td></td>
             </tr>
+            <tr></tr>
         </table>
     </body>
 </html>
