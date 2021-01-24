@@ -2,6 +2,8 @@ from app import db
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_login import UserMixin
 from app import login
+from datetime import datetime
+
 
 class User(UserMixin, db.Model):
     __tablename__ = 'users'
@@ -29,6 +31,26 @@ class Session(db.Model):
 
     def __repr__(self):
         return '<Session of user {}>'.format(self.login)
+
+class Friends(db.Model):
+    __tablename__ = 'Friends'
+    id = db.Column(db.Integer, primary_key=True)
+    main_friend =  db.Column(db.String(64), index = True, unique = False)
+    friend = db.Column(db.String(64), index = True, unique = False)
+
+    def __repr__(self):
+        return '<{} is friend of user {}>'.format(self.friend, self.main_friend)
+
+class Messages(db.Model):
+    __tablename__ = 'Messages'
+    id = db.Column(db.Integer, primary_key=True)
+    sender = db.Column(db.String(64), index = True, unique = False)
+    receiver = db.Column(db.String(64), index = True, unique = False)
+    msg_text  = db.Column(db.String(256), index = True, unique = False)
+    time_stamp = db.Column(db.DateTime, index = True, default = datetime.utcnow)
+
+    def __repr__(self):
+        return '<Message of user {}>'.format(self.receiver)
 
 
 @login.user_loader

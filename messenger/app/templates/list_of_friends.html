@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<dl>
+    <dt><h3>Список друзей:</h3></dt>
+    {% for friend in list_of_friends %}
+        <dd>{{friend.friend}}</dd>
+    {% endfor %}
+</dl>
+
+
+{% endblock %}

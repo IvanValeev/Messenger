@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<dl>
+    <dt><h3>Входящие сообщения:</h3></dt>
+    {% for msg in list_of_msgs %}
+        <dd>{{msg.sender}} {{msg.msg_text}} {{msg.time_stamp}}</dd>
+    {% endfor %}
+</dl>
+
+
+{% endblock %}

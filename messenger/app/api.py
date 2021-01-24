@@ -1,5 +1,5 @@
 from app import db
-from app.models import User, Session, Friends
+from app.models import User, Session, Friends, Messages
 import uuid
 from flask import request, make_response, jsonify, session, flash, redirect, url_for, render_template
 
@@ -31,7 +31,9 @@ def logging_in(username, password):
         session['session_id'] = id_session
         db.session.add(this_session)
         db.session.commit()
-        return make_response(id_session, 200)
+        return redirect(url_for('user', username=session['username']))
+        #return render_template('user_page.html', user = session['username'])
+        #return make_response(id_session, 200)
         # return render_template('index.html', user=session.get('session_id', None))
 
     elif cur_session and cur_session.uuid == session.get('session_id', None):
@@ -42,8 +44,10 @@ def logging_in(username, password):
         session['session_id'] = id_session
         cur_session.uuid =  id_session
         db.session.commit()
+        return redirect(url_for('user', username=session['username']))
+        #return render_template('user_page.html', user = session['username'])
         # return make_response('Enter success!', 200)
-        return render_template('index.html', user=session.get('session_id', None))
+        #return render_template('index.html', user=session.get('session_id', None))
     
     # elif not login or not login.check_password(password):
     #     return make_response('Wrong login or password', 200)
@@ -106,3 +110,21 @@ def find_friend_of_user(username, friend_name):
 def find_all_friends_of_user(username):
     list_of_friends = Friends.query.filter_by(main_friend=username).all()
     return list_of_friends
+
+
+def send_msg(sender, receiver, msg_text):
+    msg = Messages(sender=sender, receiver=receiver, msg_text=msg_text)
+    db.session.add(msg)
+    db.session.commit()
+    
+
+def receive_msg(sender, receiver, msg_text):
+    msg = Messages.query.filter_by(sender=sender, receiver=receiver, msg_text=msg_text).first()
+    return msg
+
+
+def get_all_incoming_msg(receiver):
+    msg = Messages.query.filter_by(receiver=receiver).all()
+    return msg
+
+

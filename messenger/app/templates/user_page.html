@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<style>
+body{background-image:url("https://images.alphacoders.com/960/thumb-1920-960960.jpg")}
+</style>
+
+
+<h2>{{ user }}'s page</h2>
+<div>
+    <a href="{{url_for('sending_msg')}}">Send message</a>
+    <br>
+    <br>
+    <a href="{{url_for('incoming_messages')}}">Incomimg messages</a>
+    <br>
+    <br>
+    <a href="{{url_for('add_friend')}}">Add friend</a>
+    <br>
+    <br>
+    <a href="{{url_for('list_of_friends')}}">List of friends</a>
+</div>
+{% endblock %}
